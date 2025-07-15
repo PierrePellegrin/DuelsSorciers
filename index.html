@@ -181,6 +181,7 @@
             Name: "!EXPELIARMUS",
             Blocage: 1,
             Degat: 1,
+            Special: "Prend possession de la baguette de Sureau",
             Description: "Sortilege de désarmement, prive la cible de sa baguette durant 1 tour et lui inflige x1 points de dégâts"
         }
     ];
@@ -202,6 +203,7 @@
             Id: 3,
             Name: "VENTUS",
             Degat: 2,
+            Special: "Révèle la cape d'invisibilité",
             Description: "Crée une bourrasque de vent, inflige x2 points de dégâts",
         },
         {
@@ -221,6 +223,7 @@
         {
             Id: 6,
             Name: "TARRENTALLEGRA",
+            Blocage: 1,
             Degat: 1,
             Description: "Les jambes du personnage cible deviennent incontrôlables durant 1 tour, inflige x1 points de dégâts",
         },
@@ -228,13 +231,15 @@
             Id: 7,
             Name: "LEVICORPUS",
             Degat: 1,
+            Blocage: 1,
+            Special: "Révèle la cape d'invisibilité",
             Description: "Soulève le personnage dans les airs par les chevilles durant 1 tour, inflige x1 points de dégâts",
         },
         {
             Id: 8,
             Name: "SERPENSORSIA",
-            PvObjet: 2,
-            DegatObjet: 2,
+            PvCreature: 2,
+            DegatCreature: 2,
             Description: "Un serpent avec x2 points de vie emerge de la baguette,\n il inflige 2 points de dégâts à un adversaire en debut de chaque tour",
         },
         {
@@ -268,7 +273,7 @@
         {
             Id: 13,
             Name: "PROTEGO",
-            PvObjet: 5,
+            Bouclier: 5,
             Description: "Crée un bouclier qui renvoie le prochain sort subi contre son opposant.\n Le bouclier peu resister jusqu'à x5 dégâts et repousse également les effets du sort s'il ne cede pas",
         }
     ];
@@ -324,15 +329,15 @@
         {
             Id: 8,
             Name: "PIERTOTUM LOCOMOTOR",
-            PvObjet: 2,
-            DegatObjet: 4,
+            PvCreature: 2,
+            DegatCreature: 4,
             Description: "Donne vie à une statue avec x2 points de vie qui inflige 4 points de dégâts à un adversaire en debut de chaque tour"
         },
         {
             Id: 9,
             Name: "INFERIUS",
-            PvObjet: 2,
-            DegatObjet: 5,
+            PvCreature: 2,
+            DegatCreature: 5,
             Description: "Invoque un mort-vivant avec x2 points de vie qui inflige 5 points de dégâts à un adversaire en debut de chaque tour"
         },
         {
@@ -396,6 +401,7 @@
             Id: 4,
             Name: "*** IMPERO",
             Degat: 5,
+            Controle: 1,
             Description: "Permet de prendre le contrôle du personnage cible lors de son prochain tour, lui inflige également x5 points de dégâts"
         },
         {
@@ -518,23 +524,29 @@
 
         if (charmData.hasOwnProperty("Degat")) {
             if (charmData.hasOwnProperty("Competence") && charmData.Competence > 0) {
-                details += `<li>PV adversaire si compétences >= ${charmData.Competence}: ${charmData.Degat * power} répartis</li>`;
-                details += `<li>PV adversaire si compétences < ${charmData.Competence}: ${charmData.DegatAutre * power} sur tous</li>`;
+                if (power >= charmData.Competence)
+                    details += `<li>PV infligés: ${charmData.Degat * power} répartis</li>`;
+                else
+                    details += `<li>PV infligés: ${charmData.DegatAutre * power} sur tous</li>`;
             } else {
-                details += `<li>PV adversaire: -${charmData.Degat * power}</li>`;
+                details += `<li>PV infligés: -${charmData.Degat * power}</li>`;
             }
         }
         if (charmData.hasOwnProperty("Pv")) {
-            details += `<li>PV adversaire: -${charmData.Pv * power}</li>`;
+            details += `<li>PV infligés: -${charmData.Pv * power}</li>`;
         }
         if (charmData.hasOwnProperty("PvSelf")) {
-            details += `<li>PV joueur: +${charmData.PvSelf * power}</li>`;
+            details += `<li>PV soignés: +${charmData.PvSelf * power}</li>`;
         }
         if (charmData.hasOwnProperty("Mana")) {
             details += `<li>Mana joueur: ${(charmData.Mana < 0 ? "" : "+")}${charmData.ManaMult ? charmData.Mana * power : charmData.Mana}</li>`;
         }
         if (charmData.hasOwnProperty("ManaAdv")) {
             details += charmData.ManaAdv === -99 ? `<li>Mana adversaire: reduit à 0</li>` : `<li>Mana adversaire: -${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}</li>`;
+        }
+
+        if (charmData.hasOwnProperty("Controle")) {
+            details += `<li>Contrôle: ${charmData.Controle} tour${charmData.Controle > 1 ? "s" : ""}</li>`;
         }
         if (charmData.hasOwnProperty("Blocage")) {
             details += `<li>Blocage: ${charmData.Blocage} tour${charmData.Blocage > 1 ? "s" : ""}</li>`;
@@ -548,7 +560,18 @@
                 details += `<li>Objets: ${charmData.DegatObjet} dégats par tour</li>`;
             }
         }
-
+        if (charmData.hasOwnProperty("Bouclier")) {
+            details += `<li>Bouclier: ${charmData.Bouclier * power}</li>`;
+        }
+        if (charmData.hasOwnProperty("PvCreature")) {
+            details += `<li>Créature: ${charmData.PvCreature * power} points de vie</li>`;
+            if (charmData.hasOwnProperty("DegatCreature")) {
+                details += `<li>Créature: ${charmData.DegatCreature} dégats par tour</li>`;
+            }
+        }
+        if (charmData.hasOwnProperty("Special")) {
+            details += `<li>Special: ${charmData.Special}</li>`;
+        }
         document.getElementById("charmDetailsList").innerHTML = details;
     }
 </script>
