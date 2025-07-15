@@ -529,7 +529,7 @@
             details += `<li>Mana joueur: ${charmData.ManaMult ? charmData.Mana * power : charmData.Mana}</li>`;
         }
         if (charmData.hasOwnProperty("ManaAdv")) {
-            details += charmData.ManaAdv === Number.MIN_VALUE ? `<li>Mana adversaire: reduit à 0</li>` : `<li>Mana adversaire: ${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}</li>`;
+            details += charmData.ManaAdv === -99 ? `<li>Mana adversaire: reduit à 0</li>` : `<li>Mana adversaire: ${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}</li>`;
         }
         if (charmData.hasOwnProperty("Blocage")) {
             details += `<li>Blocage: ${charmData.Blocage} tour${charmData.Blocage > 1 ? "s" : ""}</li>`;
