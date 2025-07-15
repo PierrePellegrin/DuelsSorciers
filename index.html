@@ -104,7 +104,7 @@
         {
             Id: 1,
             Name: "EPISKEY",
-            Pv: 1,
+            Degat: 1,
             Mana: 1,
             Description: "Soigne une blessure mineure x1 points de vie +1 mana"
         },
@@ -260,7 +260,7 @@
         {
             Id: 12,
             Name: "FERULA ",
-            Pv: 3,
+            Degat: 3,
             Mana: 3,
             Description: "Le sorcier fait apparaitre une attelle et des bandages qui s'enroulent d'eux-memes autour du membre blesse visé.\n Le soin rend x3 points de vie et +3 mana",
         },
@@ -517,23 +517,23 @@
 
         if (charmData.hasOwnProperty("Degat")) {
             if (charmData.hasOwnProperty("Competence") && charmData.Competence > 0) {
-                details += `<li>Dégats si compétences >= ${charmData.Competence}: ${charmData.Degat * power} répartis</li>`;
-                details += `<li>Dégats si compétences < ${charmData.Competence}: ${charmData.DegatAutre * power} sur tous</li>`;
+                details += `<li>PV adversaire si compétences >= ${charmData.Competence}: ${charmData.Degat * power} répartis</li>`;
+                details += `<li>PV adversaire si compétences < ${charmData.Competence}: ${charmData.DegatAutre * power} sur tous</li>`;
             } else {
-                details += `<li>Dégats: ${charmData.Degat * power}</li>`;
+                details += `<li>PV adversaire: -${charmData.Degat * power}</li>`;
             }
         }
         if (charmData.hasOwnProperty("Pv")) {
-            details += `<li>PV infligés: ${charmData.Pv * power}</li>`;
+            details += `<li>PV adversaire: -${charmData.Pv * power}</li>`;
         }
         if (charmData.hasOwnProperty("PvSelf")) {
-            details += `<li>PV récupérés: ${charmData.PvSelf * power}</li>`;
+            details += `<li>PV joueur: +${charmData.PvSelf * power}</li>`;
         }
         if (charmData.hasOwnProperty("Mana")) {
-            details += `<li>Mana joueur: ${charmData.ManaMult ? charmData.Mana * power : charmData.Mana}</li>`;
+            details += `<li>Mana joueur: ${(charmData.Mana < 0 ? "" : "+")}${charmData.ManaMult ? charmData.Mana * power : charmData.Mana}</li>`;
         }
         if (charmData.hasOwnProperty("ManaAdv")) {
-            details += charmData.ManaAdv === -99 ? `<li>Mana adversaire: reduit à 0</li>` : `<li>Mana adversaire: ${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}</li>`;
+            details += charmData.ManaAdv === -99 ? `<li>Mana adversaire: reduit à 0</li>` : `<li>Mana adversaire: -${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}</li>`;
         }
         if (charmData.hasOwnProperty("Blocage")) {
             details += `<li>Blocage: ${charmData.Blocage} tour${charmData.Blocage > 1 ? "s" : ""}</li>`;
