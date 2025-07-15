@@ -1,1 +1,565 @@
-<h1>Hello AAA!</h1>
+<style>
+    html, body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: black;
+        color: lightgray;
+    }
+
+    .container {
+
+    }
+
+    h5, h6{
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    a, .btn-link {
+        color: #006bb7;
+    }
+
+    .form-select {
+        width: 80px;
+        height: 40px;
+        font-size: 30px;
+        font-weight: bold;
+        margin-left: 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .power-div {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        margin-left: 5px;
+    }
+
+    .mana-button-div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 5px 20px 5px;
+        max-width: 400px;
+    }
+
+    .btn-all {
+        height: 45px;
+        border-radius: 10px;
+        border: none;
+        color: #fff;
+    }
+
+    .btn-start {
+        background-color: darkslategray;
+    }
+
+    .btn-mana {
+        width: 65px;
+        font-size: 30px;
+    }
+
+        .btn-mana.mana-1 {
+            background-color: #296bd6 !important;
+        }
+
+        .btn-mana.mana-2 {
+            background-color: #10b558;
+        }
+
+        .btn-mana.mana-5 {
+            background-color: #d9d50f;
+        }
+
+        .btn-mana.mana-10 {
+            background-color: #d16f19;
+        }
+
+        .btn-mana.mana-20 {
+            background-color: #b80f0f;
+        }
+</style>
+
+<script>
+    var charmsList1 = [
+        {
+            Id: 1,
+            Name: "EPISKEY",
+            Pv: 1,
+            Mana: 1,
+            Description: "soigne une blessure mineure x1 points de vie +1 mana"
+        },
+        {
+            Id: 2,
+            Name: "DENTESAUGMENTO",
+            Degat: 1,
+            Description: "Fait pousser de manière démesurée les dents du personnage visé, inflige x1 dégâts"
+        },
+        {
+            Id: 3,
+            Name: "FURUNCULUS",
+            Degat: 1,
+            Description: "Fait pousser des furoncles violaces sur le personnage visé, inflige x1 dégâts "
+        },
+        {
+            Id: 4,
+            Name: "EVERTE STATUM",
+            Degat: 1,
+            Description: "Projette la cible vers l'arriere, inflige x1 dégâts"
+        },
+        {
+            Id: 5,
+            Name: "RICTUSEMPRA",
+            Degat: 1,
+            Description: "Malefice de chatouillis, il provoque chez la cible un rire incontrôlable, inflige x1 dégâts"
+        },
+        {
+            Id: 6,
+            Name: "ASCENDIO",
+            Esquive: 1,
+            Mana: 1,
+            Description: "Permet de s'elever rapidement dans les airs afin d'esquiver le prochain sort, rend +1 mana"
+        },
+        {
+            Id: 7,
+            Name: "°WINGARDIUM LEVIOSA°",
+            PvObjet: 2,
+            Description: "Sortilege de levitation, il fait voler des objets d'une resistance de x2 points de vie pour protéger le sorcier"
+        },
+        {
+            Id: 8,
+            Name: "BLOCLANG",
+            Blocage: 1,
+            Description: "Colle la langue du personnage visé à son palais, l'empechant de parler durant 1 tour"
+        },
+        {
+            Id: 9,
+            Name: "OBSCURO",
+            Blocage: 1,
+            Mana: -1,
+            Description: "bande les yeux de la cible et la rend aveugle pendant 1 tour, réduit aussi son mana de -1"
+        },
+        {
+            Id: 10,
+            Name: "INCENDIO ",
+            Degat: 2,
+            Description: "Projette du feu par le bout de la baguette, inflige x2 points de dégâts"
+        },
+        {
+            Id: 11,
+            Name: "CRACHE-LIMACES",
+            Degat: 2,
+            Description: "Le personnage atteint vomi des limaces et subit x2 points de dégâts"
+        },
+        {
+            Id: 12,
+            Name: "WADSIWASI",
+            Degat: 2,
+            Description: "Déplace des objets à grande vitesse sur le personnage cible, inflige x2 points de dégâts"
+        },
+        {
+            Id: 13,
+            Name: "!EXPELIARMUS",
+            Blocage: 1,
+            Degat: 1,
+            Description: "Sortilege de désarmement, prive la cible de sa baguette durant 1 tour et lui inflige x1 points de dégâts"
+        }
+    ];
+
+    var charmsList2 = [
+        {
+            Id: 1,
+            Name: "ORCHIDEUS",
+            Mana: 4,
+            Description: "Fait apparaitre un bouquet de fleurs, génère +4 mana",
+        },
+        {
+            Id: 2,
+            Name: "FINITE",
+            Mana: 2,
+            Description: "Annule le prochain sort lance par l'adversaire, rend +2 mana",
+        },
+        {
+            Id: 3,
+            Name: "VENTUS",
+            Damage: 2,
+            Description: "Crée une bourrasque de vent, inflige x2 points de dégâts",
+        },
+        {
+            Id: 4,
+            Name: "LEGILIMENS",
+            ManaAdv: 1,
+            ManaMultAdv: true,
+            Description: "Sert à entrer dans l'esprit de l'adversaire et de voir ses cartes en main,\n enlève x1 mana au personnage atteint",
+        },
+        {
+            Id: 5,
+            Name: "CONFUNDO",
+            Damage: 1,
+            Description: "Rend confus le personnage cible durant 1 tour, inflige x1 points de dégâts",
+        },
+        {
+            Id: 6,
+            Name: "TARRENTALLEGRA",
+            Damage: 1,
+            Description: "Les jambes du personnage cible deviennent incontrôlables durant 1 tour, inflige x1 points de dégâts",
+        },
+        {
+            Id: 7,
+            Name: "LEVICORPUS",
+            Damage: 1,
+            Description: "Soulève le personnage dans les airs par les chevilles durant 1 tour, inflige x1 points de dégâts",
+        },
+        {
+            Id: 8,
+            Name: "SERPENSORSIA",
+            PvObjet: 2,
+            DamageObjet: 2,
+            Description: "Un serpent avec x2 points de vie emerge de la baguette,\n il inflige 2 points de dégâts à un adversaire en debut de chaque tour",
+        },
+        {
+            Id: 9,
+            Name: "INCARCEREM",
+            Blockage: 2,
+            Description: "Des cordes sortent de la baguette et ligotent un personnage durant 2 tours",
+        },
+        {
+            Id: 10,
+            Name: "OUBLIETTA",
+            Mana: -1,
+            Damage: 1,
+            Blockage: 1,
+            Description: "Sortilege d'amnesie, modifie la memoire de la cible et le rend confus durant 1 tour.\n Retire -1 mana et inflige x1 points de dégâts",
+        },
+        {
+            Id: 11,
+            Name: "IMPEDIMENTA",
+            Blockage: 1,
+            Damage: 2,
+            Description: "Malefice d'entrave, il arrête ou ralenti le personnage cible durant 1 tour, inflige x2 points de dégâts",
+        },
+        {
+            Id: 12,
+            Name: "FERULA ",
+            Pv: 3,
+            Mana: 3,
+            Description: "Le sorcier fait apparaitre une attelle et des bandages qui s'enroulent d'eux-memes autour du membre blesse visé.\n Le soin rend x3 points de vie et +3 mana",
+        },
+        {
+            Id: 13,
+            Name: "PROTEGO",
+            PvObjet: 5,
+            Description: "Crée un bouclier qui renvoie le prochain sort subi contre son opposant.\n Le bouclier peu resister jusqu'à x5 dégâts et repousse également les effets du sort s'il ne cede pas",
+        }
+    ];
+
+    var charmsList5 = [
+        {
+            Id: 1,
+            Name: "GLISSEO",
+            Mana: 4,
+            Esquive: 2,
+            Description: "Transforme le sol en toboggan pour permettre à tous les membres de l'équipe d'esquiver un sort\n ou bien à un seul sorcier d'esquiver les deux prochains sorts.\n Rend une partie du mana au lanceur"
+        },
+        {
+            Id: 2,
+            Name: "NEBULUS",
+            Blocage: 2,
+            ManaAdv: 1,
+            ManaMultAdv: true,
+            Description: "Permet de créer du brouillard et de bloquer au choix un adversaire durant 2 tours ou tous les adversaires durant 1 tour,\n Reduit également le mana d'un ou plusieurs adversaires de *1 au total"
+        },
+        {
+            Id: 3,
+            Name: "PETRIFICUS TOTALUS",
+            Blocage: 2,
+            Degat: 2,
+            Description: "Malefice du saucisson, immobilise et raidit totalement le personnage cible durant 2 tour, inflige x2 points de dégâts"
+        },
+        {
+            Id: 4,
+            Name: "DIFFINDO",
+            Degat: 3,
+            Description: "Inflige des coupures à l'adversaire x3 points de dégâts"
+        },
+        {
+            Id: 5,
+            Name: "DEFODIO",
+            Degat: 3,
+            Description: "Sortilege de terrassement, creuse le sol autour de l'adversaire et lui inflige x3 points de dégâts"
+        },
+        {
+            Id: 6,
+            Name: "STUPEFIX",
+            Blocage: 3,
+            Degat: 3,
+            Description: "La cible est stupefixée durant 3 tours, inflige x3 points de dégâts"
+        },
+        {
+            Id: 7,
+            Name: "EXPULSO",
+            Degat: 4,
+            Description: "Repousse un adversaire et inflige x4 points de dégâts"
+        },
+        {
+            Id: 8,
+            Name: "PIERTOTUM LOCOMOTOR",
+            PvObjet: 2,
+            DegatObjet: 4,
+            Description: "Donne vie à une statue avec x2 points de vie qui inflige 4 points de dégâts à un adversaire en debut de chaque tour"
+        },
+        {
+            Id: 9,
+            Name: "INFERIUS",
+            PvObjet: 2,
+            DegatObjet: 5,
+            Description: "Invoque un mort-vivant avec x2 points de vie qui inflige 5 points de dégâts à un adversaire en debut de chaque tour"
+        },
+        {
+            Id: 10,
+            Name: "BOMBARDA",
+            Degat: 4,
+            Description: "Provoque une explosion à l'endroit visé, inflige x4 points de dégâts à un personnage"
+        },
+        {
+            Id: 11,
+            Name: "CONFRINGO",
+            Degat: 5,
+            Description: "Provoque une explosion enflammée et inflige x5 points de dégâts"
+        },
+        {
+            Id: 12,
+            Name: "REVIGOR",
+            PvSelf: 6,
+            Mana: 6,
+            Description: "Redonne de l'energie et rend x6 points de vie +6 mana"
+        },
+        {
+            Id: 13,
+            Name: "STUPEFIX",
+            Blocage: 3,
+            Degat: 3,
+            Description: "La cible est stupefixée durant 3 tours, inflige x3 points de dégâts"
+        }
+    ];
+
+    var charmsList10 = [
+        {
+            Id: 1,
+            Name: "*** FEUDEYMON",
+            Degat: 20,
+            Competence: 8,
+            DegatAutre: 4,
+            Description: "Si la compétence est supérieure ou égale à 8,\ninvoque des flammes destructrices qui infligent x20 points de dégâts repartis aux choix sur les adversaires.\nInflige x4 à TOUS les personnages si la compétence du lanceur de sort est inferieure à 8"
+        },
+        {
+            Id: 2,
+            Name: "MORSMORDRE",
+            Blocage: 1,
+            ManaAdv: -99,
+            Mana: 1,
+            ManaMult: true,
+            Description: "Crée la marque des ténèbres qui terrorise les adversaires 1 tour. De plus leur mana est réduit à 0. Le lanceur gagne x1 mana"
+        },
+        {
+            Id: 3,
+            Name: "SPERO PATRONUM",
+            Blocage: 1,
+            ManaAdv: -99,
+            Mana: 1,
+            ManaMult: true,
+            Description: "Crée un patronus qui éblouit les adversaires 1 tour. De plus leur mana est réduit à 0. Le lanceur gagne x1 mana"
+        },
+        {
+            Id: 4,
+            Name: "*** IMPERO",
+            Degat: 5,
+            Description: "Permet de prendre le contrôle du personnage cible lors de son prochain tour, lui inflige également x5 points de dégâts"
+        },
+        {
+            Id: 5,
+            Name: "*** ENDOLORIS",
+            Blocage: 1,
+            Degat: 8,
+            Description: "Fait ressentir une douleur insupportable au personnage cible et l'immobilise 1 tour, inflige x8 points de dégâts"
+        },
+        {
+            Id: 6,
+            Name: "*** SECTUMSEMPRA",
+            Degat: 10,
+            Description: "Crée de profondes entailles dans le corps du personnage visé, inflige x10 points de dégâts"
+        },
+        {
+            Id: 7,
+            Name: "BOMBARDA MAXIMA",
+            Degat: 6,
+            Description: "Provoque une explosion à l'endroit visé, inflige x6 points de dégâts à un personnage"
+        },
+        {
+            Id: 8,
+            Name: "MORSMORDRE",
+            Blocage: 1,
+            ManaAdv: -99,
+            Mana: 1,
+            ManaMult: true,
+            Description: "Crée la marque des ténèbres qui terrorise les adversaires 1 tour. De plus leur mana est réduite à 0. Le lanceur gagne x1 mana"
+        },
+        {
+            Id: 9,
+            Name: "SPERO PATRONUM",
+            Blocage: 1,
+            ManaAdv: -99,
+            Mana: 1,
+            ManaMult: true,
+            Description: "Crée un patronus qui éblouit les adversaires 1 tour. De plus leur mana est réduite à 0. Le lanceur gagne x1 mana"
+        },
+        {
+            Id: 10,
+            Name: "*** IMPERO",
+            Degat: 5,
+            Blocage: 1,
+            Description: "Permet de prendre le contrôle du personnage cible lors de son prochain tour, lui inflige également x5 points de dégâts"
+        },
+        {
+            Id: 11,
+            Name: "*** ENDOLORIS",
+            Blocage: 1,
+            Degat: 8,
+            Description: "Fait ressentir une douleur insupportable au personnage cible et l'immobilise 1 tour, inflige x8 points de dégâts"
+        },
+        {
+            Id: 12,
+            Name: "*** SECTUMSEMPRA",
+            Degat: 10,
+            Description: "Crée de profondes entailles dans le corps du personnage visé, inflige x10 points de dégâts"
+        },
+        {
+            Id: 13,
+            Name: "BOMBARDA MAXIMA",
+            Degat: 6,
+            Description: "Provoque une explosion à l'endroit visé, inflige x6 points de dégâts à un personnage"
+        }
+    ];
+
+    var charmsList20 = [
+        {
+            Id: 1,
+            Name: "*** AVADA KEDAVRA",
+            Degat: 50,
+            Description: "Sortilege de la mort, inflige x50 points de dégâts"
+        }
+    ];
+
+    let charmData = null;
+    let power = 1;
+    let charms = {};
+
+    function getCharm(mana) {
+        
+        if (mana == 1)
+            charms = charmsList1;
+        else if (mana == 2)
+            charms = charmsList2;
+        else if (mana == 5)
+            charms = charmsList5;
+        else if (mana == 10)
+            charms = charmsList10;
+        else if (mana == 20)
+            charms = charmsList20;
+        const randomIndex = Math.floor(Math.random() * charms.length);
+        charmData = charms ? charms[randomIndex] : null;
+
+        if (charmData) {
+            displayCharmInfo(charmData);
+        } else {
+            document.getElementById("charmCard").style.display = 'none';
+        }
+    }
+
+    function displayCharmInfo(charmData) {
+        // Show the charm card
+        const charmCard = document.getElementById("charmCard");
+        charmCard.style.display = 'block';
+
+        // Set the title and subtitle
+        document.getElementById("charmTitle").innerText = charmData.Name;
+        document.getElementById("charmSubtitle").innerText = charmData.Description;
+
+        // Prepare charm details
+        let details = '';
+
+        if (charmData.hasOwnProperty("Degat")) {
+            if (charmData.hasOwnProperty("Competence") && charmData.Competence > 0) {
+                details += `Dégats si compétences >= ${charmData.Competence}: ${charmData.Degat * power} répartis<br>`;
+                details += `Dégats si compétences < ${charmData.Competence}: ${charmData.DegatAutre * power} sur tous<br>`;
+            } else {
+                details += `Dégats: ${charmData.Degat * power}<br>`;
+            }
+        }
+        if (charmData.hasOwnProperty("Pv")) {
+            details += `PV infligés: ${charmData.Pv * power}<br>`;
+        }
+        if (charmData.hasOwnProperty("PvSelf")) {
+            details += `PV récupérés: ${charmData.PvSelf * power}<br>`;
+        }
+        if (charmData.hasOwnProperty("Mana")) {
+            details += `Mana joueur: ${charmData.ManaMult ? charmData.Mana * power : charmData.Mana}<br>`;
+        }
+        if (charmData.hasOwnProperty("ManaAdv")) {
+            details += charmData.ManaAdv === Number.MIN_VALUE ? `Mana adversaire: reduit à 0<br>` : `Mana adversaire: ${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}<br>`;
+        }
+        if (charmData.hasOwnProperty("Blocage")) {
+            details += `Blocage: ${charmData.Blocage} tour${charmData.Blocage > 1 ? "s" : ""}<br>`;
+        }
+        if (charmData.hasOwnProperty("Esquive")) {
+            details += `Esquive: ${charmData.Esquive}<br>`;
+        }
+        if (charmData.hasOwnProperty("PvObjet")) {
+            details += `Objet: ${charmData.PvObjet * power} points de vie<br>`;
+            if (charmData.hasOwnProperty("DegatObjet")) {
+                details += `Objets: ${charmData.DegatObjet} dégats par tour<br>`;
+            }
+        }
+
+        document.getElementById("charmDetails").innerHTML = details;
+    }
+</script>
+
+<div class="container">
+    <div style="display: flex; flex-direction: column;">
+        <div class="power-div">
+            <p>Puissance de l'attaque:</p>
+            <select id="powerSelect" class="form-select">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+
+        <p style="margin-left: 7px;">Mana consommée:</p>
+        <div class="mana-button-div">
+            <button class="btn-all btn-mana mana-1" onclick="getCharm(1)"> 1 </button>
+            <button class="btn-all btn-mana mana-2" onclick="getCharm(2)"> 2 </button>
+            <button class="btn-all btn-mana mana-5" onclick="getCharm(5)"> 5 </button>
+            <button class="btn-all btn-mana mana-10" onclick="getCharm(10)"> 10 </button>
+            <button class="btn-all btn-mana mana-20" onclick="getCharm(20)"> 20 </button>
+        </div>
+    </div>
+
+    <div id="charmCard" style="width:100%; display: none;">
+        <div class="card-body">
+            <h5 id="charmTitle" style="font-size: 25px;"></h5>
+            <h6 id="charmSubtitle" style="font-size: 18px;"></h6>
+            <div id="charmDetails" style="font-size: 18px;"></div>
+        </div>
+    </div>
+</div>
