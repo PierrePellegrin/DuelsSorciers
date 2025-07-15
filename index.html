@@ -11,13 +11,19 @@
         }
     }
 
-    .container {
-
+    .container{
+        margin-top: 30px;
+        margin-left: 3px;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
     }
 
-    h5, h6{
+    .div-title, .div-descr {
         margin-top: 15px;
         margin-bottom: 15px;
+        font-weight: bold;
     }
 
     a, .btn-link {
@@ -25,14 +31,19 @@
     }
 
     .form-select {
-        width: 80px;
-        height: 40px;
+        min-width: 100px;
+        height: 45px;
         font-size: 30px;
         font-weight: bold;
         margin-left: 10px;
         border-radius: 5px;
         text-align: center;
     }
+
+        .form-select option {
+            font-size: 12px;
+            max-width: 30px;
+        }
 
     .power-div {
         display: flex;
@@ -228,7 +239,7 @@
         {
             Id: 9,
             Name: "INCARCEREM",
-            Blockage: 2,
+            Blocage: 2,
             Description: "Des cordes sortent de la baguette et ligotent un personnage durant 2 tours",
         },
         {
@@ -236,13 +247,13 @@
             Name: "OUBLIETTA",
             Mana: -1,
             Degat: 1,
-            Blockage: 1,
+            Blocage: 1,
             Description: "Sortilege d'amnesie, modifie la memoire de la cible et le rend confus durant 1 tour.\n Retire -1 mana et inflige x1 points de dégâts",
         },
         {
             Id: 11,
             Name: "IMPEDIMENTA",
-            Blockage: 1,
+            Blocage: 1,
             Degat: 2,
             Description: "Malefice d'entrave, il arrête ou ralenti le personnage cible durant 1 tour, inflige x2 points de dégâts",
         },
@@ -463,7 +474,7 @@
     let charms = {};
 
     function getCharm(mana) {
-        
+
         if (mana == 1)
             charms = charmsList1;
         else if (mana == 2)
@@ -485,6 +496,10 @@
     }
 
     function displayCharmInfo(charmData) {
+
+        const selectElement = document.getElementById("powerSelect");
+        power = selectElement.value;
+
         // Show the charm card
         const charmCard = document.getElementById("charmCard");
         charmCard.style.display = 'block';
@@ -498,38 +513,38 @@
 
         if (charmData.hasOwnProperty("Degat")) {
             if (charmData.hasOwnProperty("Competence") && charmData.Competence > 0) {
-                details += `Dégats si compétences >= ${charmData.Competence}: ${charmData.Degat * power} répartis<br>`;
-                details += `Dégats si compétences < ${charmData.Competence}: ${charmData.DegatAutre * power} sur tous<br>`;
+                details += `<li>Dégats si compétences >= ${charmData.Competence}: ${charmData.Degat * power} répartis</li>`;
+                details += `<li>Dégats si compétences < ${charmData.Competence}: ${charmData.DegatAutre * power} sur tous</li>`;
             } else {
-                details += `Dégats: ${charmData.Degat * power}<br>`;
+                details += `<li>Dégats: ${charmData.Degat * power}</li>`;
             }
         }
         if (charmData.hasOwnProperty("Pv")) {
-            details += `PV infligés: ${charmData.Pv * power}<br>`;
+            details += `<li>PV infligés: ${charmData.Pv * power}</li>`;
         }
         if (charmData.hasOwnProperty("PvSelf")) {
-            details += `PV récupérés: ${charmData.PvSelf * power}<br>`;
+            details += `<li>PV récupérés: ${charmData.PvSelf * power}</li>`;
         }
         if (charmData.hasOwnProperty("Mana")) {
-            details += `Mana joueur: ${charmData.ManaMult ? charmData.Mana * power : charmData.Mana}<br>`;
+            details += `<li>Mana joueur: ${charmData.ManaMult ? charmData.Mana * power : charmData.Mana}</li>`;
         }
         if (charmData.hasOwnProperty("ManaAdv")) {
-            details += charmData.ManaAdv === Number.MIN_VALUE ? `Mana adversaire: reduit à 0<br>` : `Mana adversaire: ${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}<br>`;
+            details += charmData.ManaAdv === Number.MIN_VALUE ? `<li>Mana adversaire: reduit à 0</li>` : `<li>Mana adversaire: ${charmData.ManaMultAdv ? charmData.ManaAdv * power : charmData.ManaAdv}</li>`;
         }
         if (charmData.hasOwnProperty("Blocage")) {
-            details += `Blocage: ${charmData.Blocage} tour${charmData.Blocage > 1 ? "s" : ""}<br>`;
+            details += `<li>Blocage: ${charmData.Blocage} tour${charmData.Blocage > 1 ? "s" : ""}</li>`;
         }
         if (charmData.hasOwnProperty("Esquive")) {
-            details += `Esquive: ${charmData.Esquive}<br>`;
+            details += `<li>Esquive: ${charmData.Esquive}</li>`;
         }
         if (charmData.hasOwnProperty("PvObjet")) {
-            details += `Objet: ${charmData.PvObjet * power} points de vie<br>`;
+            details += `<li>Objet: ${charmData.PvObjet * power} points de vie</li>`;
             if (charmData.hasOwnProperty("DegatObjet")) {
-                details += `Objets: ${charmData.DegatObjet} dégats par tour<br>`;
+                details += `<li>Objets: ${charmData.DegatObjet} dégats par tour</li>`;
             }
         }
 
-        document.getElementById("charmDetails").innerHTML = details;
+        document.getElementById("charmDetailsList").innerHTML = details;
     }
 </script>
 
@@ -563,9 +578,11 @@
 
     <div id="charmCard" style="width:100%; display: none;">
         <div class="card-body">
-            <h5 id="charmTitle" style="font-size: 25px;"></h5>
-            <h6 id="charmSubtitle" style="font-size: 18px;"></h6>
-            <div id="charmDetails" style="font-size: 18px;"></div>
+            <div class="div-title" id="charmTitle" style="font-size: 25px;"></div>
+            <div class="div-descr" id="charmSubtitle" style="font-size: 19px;"></div>
+            <div id="charmDetails" style="font-size: 18px;">
+                <ul id="charmDetailsList"></ul>
+            </div>
         </div>
     </div>
 </div>
